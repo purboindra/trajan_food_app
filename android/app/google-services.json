@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "277843447662",
+    "firebase_url": "https://trajan-food-app-78f9c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "trajan-food-app-78f9c",
+    "storage_bucket": "trajan-food-app-78f9c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277843447662:android:338c58378f2b0293c13b7f",
+        "android_client_info": {
+          "package_name": "com.example.trajan_food_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfsem3YaneUNI4I2k7a_2laF_ipexGa6U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
