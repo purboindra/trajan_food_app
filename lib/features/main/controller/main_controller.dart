@@ -4,7 +4,7 @@ import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
 import 'package:trajan_food_app/features/favourite/screen/favourite_screen.dart';
 import 'package:trajan_food_app/features/home/screen/home_screen.dart';
-import 'package:trajan_food_app/features/person/screen/person_screen.dart';
+import 'package:trajan_food_app/features/profile/screen/profile_screen.dart';
 import 'package:trajan_food_app/features/promo/screen/promo_screen.dart';
 
 class MainController extends GetxController {
@@ -163,6 +163,6 @@ class MainController extends GetxController {
     HomeScreen(),
     PromoScreen(),
     FavouriteScreen(),
-    const PersonScreen(),
+    PersonScreen(),
   ];
 }

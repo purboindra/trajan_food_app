@@ -47,7 +47,7 @@ class FavouriteScreen extends StatelessWidget {
                   Obx(() => IconButton(
                       onPressed: () => _favoriteController.toggleIsGrid(),
                       icon: Icon(
-                        _favoriteController.isGrid.isTrue
+                        _favoriteController.isGrid.isFalse
                             ? Icons.grid_view
                             : Icons.list,
                         size: 32,

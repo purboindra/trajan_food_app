@@ -17,11 +17,11 @@ class FavoriteController extends GetxController {
     );
     favoriteList[index] = favorite;
     if (favorite.isFavorite) {
-      title = 'Added to Favorite';
-      message = '${favorite.menuTitle} added to your favorite!';
+      title = 'Success Add Item To Favorite';
+      message = '${favorite.menuTitle} sucessfully add to your favorite';
     } else {
-      title = 'Remove from Favorite';
-      message = '${favorite.menuTitle} remove from your favorite!';
+      title = 'Success Remove Item From Favorite';
+      message = '${favorite.menuTitle} sucessfully remove from your favorite';
     }
     Get.showSnackbar(
       GetSnackBar(
