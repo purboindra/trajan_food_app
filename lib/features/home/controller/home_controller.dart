@@ -107,29 +107,31 @@ class HomeController extends GetxController {
     {'imageUrl': 'assets/icons/pizza_icon.png', 'label': 'Pizza'},
   ];
 
-  final favoriteList = [
-    {
-      'imageUrl': 'assets/images/favorite_1.png',
-      'label': 'Cheese Burger',
-      'rating': '4.7',
-      'price': '28',
-    },
-    {
-      'imageUrl': 'assets/images/favorite_2.png',
-      'label': 'Cappucino',
-      'rating': '4.6',
-      'price': '32',
-    },
+  final List<ProductModel> favoriteList = [
+    ProductModel(
+      imageUrl: 'assets/images/favorite_1.png',
+      label: 'Chesee Burger',
+      price: '28',
+      rating: '4.7',
+      tag: '',
+    ),
+    ProductModel(
+      imageUrl: 'assets/images/favorite_2.png',
+      label: 'Cappucino',
+      price: '32',
+      rating: '4.6',
+      tag: '',
+    ),
   ];
 
-  final List<RecommendModel> recomendList = [
-    RecommendModel(
+  final List<ProductModel> recomendList = [
+    ProductModel(
         imageUrl: 'assets/images/recomend_1.png',
         label: 'Spaghetti with berbaque sauce',
         price: '30',
         rating: '4.7',
         tag: 'Spagheeti, Egg'),
-    RecommendModel(
+    ProductModel(
         imageUrl: 'assets/images/recomend_2.png',
         label: 'Beef pizza with mushroom',
         price: '132',

@@ -1,6 +1,9 @@
 import 'package:get/get.dart';
+import 'package:trajan_food_app/features/detail/bindings/detail_binding.dart';
+import 'package:trajan_food_app/features/detail/screen/detail_screen.dart';
 import 'package:trajan_food_app/features/main/bindings/main_binding.dart';
 import 'package:trajan_food_app/features/main/screen/main_screen.dart';
+import 'package:trajan_food_app/features/models/recommend_model.dart';
 import 'package:trajan_food_app/features/onboarding/screen/onboarding_screen.dart';
 import 'package:trajan_food_app/features/signin/screen/sign_in_screen.dart';
 import 'package:trajan_food_app/features/signup/screen/sign_up_screen.dart';
@@ -29,6 +32,24 @@ class RoutePages {
       name: RouteName.mainScreen,
       page: () => MainScreen(),
       binding: MainBainding(),
+    ),
+    GetPage(
+      name: RouteName.detailScreen,
+      binding: DetailBinding(),
+      page: () {
+        ProductModel productData = ProductModel(
+            imageUrl: '', label: '', price: '', rating: '', tag: '');
+        if (Get.arguments != null && Get.arguments is Map) {
+          final Map<String, dynamic> args = Get.arguments;
+
+          if (args.containsKey('data')) {
+            productData = ProductModel.fromJson(args['data']);
+          }
+        }
+        return DetailScreen(
+          productModel: productData,
+        );
+      },
     ),
   ];
 }

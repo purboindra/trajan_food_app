@@ -9,6 +9,7 @@ import 'package:trajan_food_app/features/home/widgets/header_widget.dart';
 import 'package:trajan_food_app/features/home/widgets/recommended_cart.dart';
 import 'package:trajan_food_app/features/home/widgets/search_widget.dart';
 import 'package:trajan_food_app/features/home/widgets/slider.dart';
+import 'package:trajan_food_app/route/route_name.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -63,11 +64,19 @@ class HomeScreen extends StatelessWidget {
                         itemCount: _homeController.favoriteList.length,
                         itemBuilder: (context, index) {
                           final data = _homeController.favoriteList[index];
-                          return FavoriteCard(
-                            imageUrl: data['imageUrl']!,
-                            label: data['label']!,
-                            price: data['price']!,
-                            rating: data['rating']!,
+                          return InkWell(
+                            onTap: () {
+                              final jsonEncode = data.toJson();
+                              Get.toNamed(RouteName.detailScreen, arguments: {
+                                'data': jsonEncode,
+                              });
+                            },
+                            child: FavoriteCard(
+                              imageUrl: data.imageUrl,
+                              label: data.label,
+                              price: data.price,
+                              rating: data.rating,
+                            ),
                           );
                         },
                       ),
