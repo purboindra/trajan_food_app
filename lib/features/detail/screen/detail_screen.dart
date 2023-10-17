@@ -7,6 +7,7 @@ import 'package:trajan_food_app/features/detail/widgets/chip_resto_widget.dart';
 import 'package:trajan_food_app/features/detail/widgets/header_detail_widget.dart';
 import 'package:trajan_food_app/features/detail/widgets/resto_information_widget.dart';
 import 'package:trajan_food_app/features/models/recommend_model.dart';
+import 'package:trajan_food_app/route/route_name.dart';
 
 class DetailScreen extends StatelessWidget {
   DetailScreen({
@@ -243,7 +244,13 @@ class DetailScreen extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topRight,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () =>
+                      Get.toNamed(RouteName.orderScreen, arguments: {
+                    'data': productModel.toJson(),
+                    'totalPrice':
+                        detailController.totalPrice(productModel).value,
+                    'totalItem': detailController.itemCount.value,
+                  }),
                   style: ButtonStyle(
                     backgroundColor: const MaterialStatePropertyAll(tealColor),
                     padding: const MaterialStatePropertyAll(

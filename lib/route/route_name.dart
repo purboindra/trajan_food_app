@@ -5,4 +5,5 @@ class RouteName {
   static const signInScreen = '/sign-in-screen';
   static const mainScreen = '/main-screen';
   static const detailScreen = '/detail-screen';
+  static const orderScreen = '/order-screen';
 }

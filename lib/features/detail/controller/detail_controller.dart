@@ -16,6 +16,14 @@ class DetailController extends GetxController {
   void decrementItem() {
     if (_itemCount.value > 1) {
       _itemCount.value--;
+    } else {
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: 'Maaf Anda Sudah Minimal Limit Item',
+          message: 'Item minimal harus memiliki 1 item',
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 }
