@@ -10,11 +10,13 @@ class TextFormFieldWidget extends StatelessWidget {
     required this.label,
     required this.hintText,
     this.isPassword,
+    this.textEditingController,
   });
 
   final String label;
   final String hintText;
   final bool? isPassword;
+  final TextEditingController? textEditingController;
 
   final authC = Get.put(AuthController());
 
@@ -35,6 +37,7 @@ class TextFormFieldWidget extends StatelessWidget {
         ),
         Obx(
           () => TextFormField(
+            controller: textEditingController,
             obscureText: authC.isObsecure.isTrue && isPassword != null,
             style: ConstantTextStyle.stylePoppins(color: whiteColor),
             decoration: InputDecoration(

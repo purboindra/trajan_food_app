@@ -60,6 +60,7 @@ class SignUpScreen extends StatelessWidget {
                   height: 20,
                 ),
                 TextFormFieldWidget(
+                  textEditingController: authC.userNameController,
                   hintText: 'Your Name',
                   label: 'Username',
                 ),
@@ -67,6 +68,7 @@ class SignUpScreen extends StatelessWidget {
                   height: 20,
                 ),
                 TextFormFieldWidget(
+                  textEditingController: authC.emailController,
                   hintText: 'Your Email',
                   label: 'Email',
                 ),
@@ -74,6 +76,7 @@ class SignUpScreen extends StatelessWidget {
                   height: 20,
                 ),
                 TextFormFieldWidget(
+                  textEditingController: authC.passwordController,
                   hintText: 'Your Password',
                   label: 'Password',
                   isPassword: true,
@@ -81,10 +84,12 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormFieldWidget(
-                  hintText: 'Your Location',
-                  label: 'Location',
-                ),
+                Obx(() => TextFormFieldWidget(
+                      hintText: authC.userLocation.isEmpty
+                          ? 'Your Location'
+                          : authC.userLocation.value,
+                      label: 'Location',
+                    )),
                 const SizedBox(
                   height: 20,
                 ),
@@ -110,11 +115,12 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                CustomButtonWidget(
-                  label: 'Sign Up',
-                  isFullButton: true,
-                  onPressed: () => Get.toNamed(RouteName.mainScreen),
-                ),
+                Obx(() => CustomButtonWidget(
+                    label: authC.isLoading.isTrue ? 'Loading...' : 'Sign Up',
+                    isFullButton: true,
+                    onPressed: authC.isLoading.isTrue
+                        ? null
+                        : () async => await authC.signUpUser())),
                 const SizedBox(
                   height: 50,
                 ),

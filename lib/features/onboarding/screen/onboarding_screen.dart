@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trajan_food_app/features/onboarding/controller/onboarding_controller.dart';
-import 'package:trajan_food_app/route/route_name.dart';
 import 'package:trajan_food_app/widgets/custom_button_widget.dart';
 
 import '../../../constant/constant_color.dart';
@@ -38,7 +37,7 @@ class OnboardingScreen extends StatelessWidget {
               children: [
                 CustomButtonWidget(
                   label: 'Get Started',
-                  onPressed: () => Get.toNamed(RouteName.signUpScreen),
+                  onPressed: () => onboardingController.handleGetStared(),
                 ),
                 const SizedBox(
                   height: 20,

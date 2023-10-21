@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:trajan_food_app/route/route_name.dart';
+import 'package:trajan_food_app/services/location_service.dart';
 
 class OnboardingController extends GetxController {
   final imagesOnboarding = [
@@ -8,4 +10,13 @@ class OnboardingController extends GetxController {
   ];
 
   RxInt indexImage = 0.obs;
+
+  void handleGetStared() async {
+    final location = await LocationService.getCurrentPosition();
+    if (location != null) {
+      Get.offAllNamed(RouteName.signUpScreen);
+    } else {
+      return;
+    }
+  }
 }
