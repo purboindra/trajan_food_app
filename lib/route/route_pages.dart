@@ -8,15 +8,16 @@ import 'package:trajan_food_app/features/onboarding/screen/onboarding_screen.dar
 import 'package:trajan_food_app/features/order/screen/order_screen.dart';
 import 'package:trajan_food_app/features/signin/screen/sign_in_screen.dart';
 import 'package:trajan_food_app/features/signup/screen/sign_up_screen.dart';
+import 'package:trajan_food_app/features/splash/bindings/splash_binding.dart';
 import 'package:trajan_food_app/features/splash/splash_screen.dart';
 import 'package:trajan_food_app/route/route_name.dart';
 
 class RoutePages {
   List<GetPage<dynamic>> routes = [
     GetPage(
-      name: RouteName.splashScreen,
-      page: () => const SplashScreen(),
-    ),
+        name: RouteName.splashScreen,
+        page: () => const SplashScreen(),
+        binding: SplashBinding()),
     GetPage(
       name: RouteName.onboardingScreen,
       page: () => OnboardingScreen(),
@@ -27,7 +28,7 @@ class RoutePages {
     ),
     GetPage(
       name: RouteName.signInScreen,
-      page: () => const SignInScreen(),
+      page: () => SignInScreen(),
     ),
     GetPage(
       name: RouteName.mainScreen,

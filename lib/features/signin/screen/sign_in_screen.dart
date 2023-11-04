@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
+import 'package:trajan_food_app/features/controller/auth_controller.dart';
 import 'package:trajan_food_app/route/route_name.dart';
 import 'package:trajan_food_app/widgets/custom_button_widget.dart';
 import 'package:trajan_food_app/widgets/text_form_field_widget.dart';
 
 class SignInScreen extends StatelessWidget {
-  const SignInScreen({super.key});
+  SignInScreen({super.key});
+
+  final AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +61,7 @@ class SignInScreen extends StatelessWidget {
                   height: 20,
                 ),
                 TextFormFieldWidget(
+                  textEditingController: authController.emailController,
                   hintText: 'Your Email',
                   label: 'Email',
                 ),
@@ -65,6 +69,7 @@ class SignInScreen extends StatelessWidget {
                   height: 20,
                 ),
                 TextFormFieldWidget(
+                  textEditingController: authController.passwordController,
                   hintText: 'Your Password',
                   label: 'Password',
                   isPassword: true,
@@ -94,11 +99,12 @@ class SignInScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                CustomButtonWidget(
-                  label: 'Sign In',
-                  isFullButton: true,
-                  onPressed: () => print('Hello from sign in'),
-                ),
+                Obx(() => CustomButtonWidget(
+                    label: authController.isLoading.isTrue
+                        ? 'Loading...'
+                        : 'Sign In',
+                    isFullButton: true,
+                    onPressed: () async => await authController.signInUser())),
                 const SizedBox(
                   height: 50,
                 ),

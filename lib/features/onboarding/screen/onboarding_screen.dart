@@ -31,14 +31,16 @@ class OnboardingScreen extends StatelessWidget {
           ),
           Positioned(
             bottom: 100,
-            left: 114,
-            right: 114,
+            left: 100,
+            right: 100,
             child: Column(
               children: [
-                CustomButtonWidget(
-                  label: 'Get Started',
-                  onPressed: () => onboardingController.handleGetStared(),
-                ),
+                Obx(() => CustomButtonWidget(
+                      label: onboardingController.isLoading.isTrue
+                          ? 'Loading...'
+                          : 'Get Started',
+                      onPressed: () => onboardingController.handleGetStared(),
+                    )),
                 const SizedBox(
                   height: 20,
                 ),

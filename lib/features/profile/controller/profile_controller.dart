@@ -1,4 +1,9 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trajan_food_app/route/route_name.dart';
 
 class ProfileController extends GetxController {
   final List<Map<String, dynamic>> accountFeatureList = [
@@ -18,4 +23,15 @@ class ProfileController extends GetxController {
       'label': 'Frequently Asked Question'
     },
   ];
+
+  Future<void> singOut() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await FirebaseAuth.instance.signOut();
+      await prefs.clear();
+      Get.offAllNamed(RouteName.signUpScreen);
+    } catch (e) {
+      log('ERROR FROM SIGN OUT $e');
+    }
+  }
 }

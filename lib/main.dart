@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: RoutePages().routes,
-      initialRoute: RouteName.onboardingScreen,
+      initialRoute: RouteName.splashScreen,
     );
   }
 }

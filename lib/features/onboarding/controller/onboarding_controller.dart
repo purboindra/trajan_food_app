@@ -3,6 +3,9 @@ import 'package:trajan_food_app/route/route_name.dart';
 import 'package:trajan_food_app/services/location_service.dart';
 
 class OnboardingController extends GetxController {
+  final RxBool _isLoading = false.obs;
+  RxBool get isLoading => _isLoading;
+
   final imagesOnboarding = [
     'assets/images/image_onboarding_1.png',
     'assets/images/image_onboarding_2.png',
@@ -12,7 +15,10 @@ class OnboardingController extends GetxController {
   RxInt indexImage = 0.obs;
 
   void handleGetStared() async {
+    print('HANDLE GET STARTED CALLED');
+    _isLoading.value = true;
     final location = await LocationService.getCurrentPosition();
+    _isLoading.value = false;
     if (location != null) {
       Get.offAllNamed(RouteName.signUpScreen);
     } else {

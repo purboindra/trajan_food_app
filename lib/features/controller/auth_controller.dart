@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
 import 'package:trajan_food_app/constant/constants_firebase_collections.dart';
@@ -35,9 +39,18 @@ class AuthController extends GetxController {
 
   Future<void> signUpUser() async {
     try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+
       _isLoading.value = true;
 
-      if (await _isDuplicateEmail()) throw Exception('Email Already Use!');
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
 
       final currentLocation = await LocationService.getCurrentPosition();
       List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -52,6 +65,11 @@ class AuthController extends GetxController {
           longitude: currentLocation.longitude.toString());
 
       final userModel = UserModel(
+        accessToken: credential.credential?.accessToken ?? '',
+        token: credential.credential?.token.toString() ?? '0',
+        createdAt: credential.user?.metadata.creationTime ?? DateTime.now(),
+        photoUrl: credential.user?.photoURL ?? '',
+        uid: credential.user?.uid ?? '',
         id: '1',
         userName: userNameController.text,
         email: emailController.text,
@@ -64,11 +82,77 @@ class AuthController extends GetxController {
 
       await userCollection.doc(user.id).update({'id': user.id});
 
+      final userCopywith = userModel.copyWith(id: user.id);
+
+      final userEncode = jsonEncode(userCopywith.toJson());
+
+      prefs.setString('user', userEncode);
+
       Get.showSnackbar(const GetSnackBar(
         title: 'Register Successfully',
         message: 'Success register to trajan food app, enjoy!',
         duration: Duration(seconds: 3),
       )).future.then((value) => Get.offAllNamed(RouteName.mainScreen));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Sorry, password too weak...',
+          duration: Duration(seconds: 3),
+        ));
+      } else if (e.code == 'email-already-in-use') {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Sorry, email already use...',
+          duration: Duration(seconds: 3),
+        ));
+      }
+    } catch (e, st) {
+      print('Error From Sign Up $e, Stack Trace: $st');
+      Get.showSnackbar(GetSnackBar(
+        title: 'Something Went Wrong',
+        message: 'Sorry, $e',
+        duration: const Duration(seconds: 3),
+      ));
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  Future<void> signInUser() async {
+    _isLoading.value = true;
+    try {
+      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
+      Get.offAllNamed(RouteName.mainScreen);
+      print('USER $user');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Email or user not found!',
+          duration: Duration(seconds: 3),
+        ));
+      } else if (e.code == 'wrong-password') {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Wrong password!',
+          duration: Duration(seconds: 3),
+        ));
+      } else if (e.code == 'invalid-email') {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Email invalid!',
+          duration: Duration(seconds: 3),
+        ));
+      } else {
+        Get.showSnackbar(const GetSnackBar(
+          title: 'Something Went Wrong',
+          message: 'Sorry, invalid creentials!',
+          duration: Duration(seconds: 3),
+        ));
+      }
     } catch (e, st) {
       print('Error From Sign Up $e, Stack Trace: $st');
       Get.showSnackbar(GetSnackBar(

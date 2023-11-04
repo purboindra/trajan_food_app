@@ -83,7 +83,29 @@ class AccountCard extends StatelessWidget {
                   ],
                 );
               },
-            ))
+            )),
+            const SizedBox(
+              height: 10,
+            ),
+            InkWell(
+              onTap: () async => await profileController.singOut(),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Logout',
+                    style: ConstantTextStyle.stylePoppins(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
