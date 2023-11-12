@@ -1,44 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:trajan_food_app/features/models/only_for_you_model.dart';
+import 'package:trajan_food_app/constant/constants_firebase_collections.dart';
+import 'package:trajan_food_app/features/models/product_model.dart';
 
 class PromoController extends GetxController {
-  final List<OnlyForYouModel> onlyForYouList = [
-    OnlyForYouModel(
-      address: 'Jl. Nusa Indah IV No.2,Tangerang',
-      menuTitle: 'Ramen Teriyaki',
-      discount: '40',
-      isDiscount: true,
-      restoName: 'Ramen Ngab',
-      imageUrl: 'assets/images/only_for_you_1.png',
-      rating: '4.7',
-    ),
-    OnlyForYouModel(
-        address: 'Socrate, Citra-Raya',
-        menuTitle: 'Cappucino',
-        discount: '0',
-        isDiscount: false,
-        imageUrl: 'assets/images/only_for_you_2.png',
-        rating: '4.3',
-        restoName: 'Hafee'),
-  ];
+  final RxBool _isLoading = false.obs;
+  RxBool get isLoading => _isLoading;
 
-  final List<OnlyForYouModel> blackFridayList = [
-    OnlyForYouModel(
-      address: 'Jl. Veteran 2, Amsterdam',
-      menuTitle: 'Chichen Prek',
-      discount: '32',
-      isDiscount: true,
-      restoName: 'Chicken Food',
-      imageUrl: 'assets/images/black_friday_1.png',
-      rating: '4.2',
-    ),
-    OnlyForYouModel(
-        address: 'Aristoteles, Citra-Raya',
-        menuTitle: 'Steak With Cheese',
-        discount: '24',
-        isDiscount: true,
-        imageUrl: 'assets/images/black_friday_2.png',
-        rating: '4.5',
-        restoName: 'My Steak'),
-  ];
+  final RxList<ProductModel> _onlyForYouProductList = <ProductModel>[].obs;
+  RxList<ProductModel> get onlyForYouProductList => _onlyForYouProductList;
+
+  final RxList<ProductModel> _blackFridayProductList = <ProductModel>[].obs;
+  RxList<ProductModel> get blackFridayProductList => _blackFridayProductList;
+
+  CollectionReference productCollection =
+      FirebaseCollectionConstants.getProductCollection();
+
+  Future<void> getOnlyForYouProduct() async {
+    try {
+      final data = await productCollection
+          .where("product_type", isEqualTo: "favorite")
+          .get();
+      for (final product in data.docs) {
+        _onlyForYouProductList
+            .add(ProductModel.fromJson(product.data() as Map<String, dynamic>));
+      }
+    } catch (e, st) {
+      print("ERROR FROM GET FAVORITE PRODUCT $e $st");
+    }
+  }
+
+  Future<void> getBlackFridayProduct() async {
+    try {
+      final data = await productCollection
+          .where("product_type", isEqualTo: "blackFriday")
+          .get();
+      for (final product in data.docs) {
+        _blackFridayProductList
+            .add(ProductModel.fromJson(product.data() as Map<String, dynamic>));
+      }
+    } catch (e, st) {
+      print("ERROR FROM GET FAVORITE PRODUCT $e $st");
+    }
+  }
+
+  Future<void> runGetProduct() async {
+    _isLoading.value = true;
+    try {
+      await getBlackFridayProduct();
+      await getOnlyForYouProduct();
+    } catch (e) {
+      print('ERROR FROM RUN GET PRODUCT $e');
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  @override
+  void onInit() async {
+    await runGetProduct();
+    super.onInit();
+  }
 }

@@ -61,10 +61,10 @@ class UserModel {
         accessToken: json['accessToken'],
         token: json['token'],
         userName: json['userName'],
-        createdAt: json['createdAt'],
+        createdAt: DateTime.parse(json['createdAt']),
         email: json['email'],
         password: json['password'],
-        location: json['location'],
+        location: LocationModel.fromJson(json['location']),
         photoUrl: json['photoUrl'],
         productFavorite: json['productFavorite']);
   }

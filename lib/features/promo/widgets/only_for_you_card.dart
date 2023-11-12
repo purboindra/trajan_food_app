@@ -44,7 +44,7 @@ class OnlyForYouCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     image: DecorationImage(
-                      image: AssetImage(imageUrl),
+                      image: NetworkImage(imageUrl),
                     ),
                   ),
                 ),

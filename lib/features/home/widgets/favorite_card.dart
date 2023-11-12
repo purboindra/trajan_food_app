@@ -33,7 +33,7 @@ class FavoriteCard extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
                   image: DecorationImage(
-                      image: AssetImage(imageUrl), fit: BoxFit.cover)),
+                      image: NetworkImage(imageUrl), fit: BoxFit.cover)),
             ),
           ),
           Padding(

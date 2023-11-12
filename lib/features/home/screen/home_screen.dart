@@ -20,109 +20,133 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeaderWidget(),
-              const SizedBox(
-                height: 22,
+      body: Obx(
+        () {
+          if (_homeController.isLoading.isTrue) {
+            return SizedBox(
+              height: Get.size.height,
+              child: const Center(
+                child: CircularProgressIndicator.adaptive(),
               ),
-              const SearchWidget(),
-              const SizedBox(
-                height: 10,
-              ),
-              CarouselSlider(homeController: _homeController),
-              const SizedBox(
-                height: 20,
-              ),
-              CategoryWidget(homeController: _homeController),
-              const SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Favorite',
-                      style: ConstantTextStyle.stylePoppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 155,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _homeController.favoriteList.length,
-                        itemBuilder: (context, index) {
-                          final data = _homeController.favoriteList[index];
-                          return InkWell(
-                            onTap: () {
-                              final jsonEncode = data.toJson();
-                              Get.toNamed(RouteName.detailScreen, arguments: {
-                                'data': jsonEncode,
-                              });
+            );
+          }
+          return SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() {
+                    if (_homeController.isLoadingGetUser.isTrue) {
+                      return const SizedBox();
+                    }
+                    return HeaderWidget(
+                      userModel: _homeController.userModel.value,
+                    );
+                  }),
+                  const SizedBox(
+                    height: 22,
+                  ),
+                  const SearchWidget(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CarouselSlider(homeController: _homeController),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CategoryWidget(homeController: _homeController),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 36),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Favorite',
+                          style: ConstantTextStyle.stylePoppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: 155,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                _homeController.favoriteProductList.length,
+                            itemBuilder: (context, index) {
+                              final data =
+                                  _homeController.favoriteProductList[index];
+                              return InkWell(
+                                onTap: () {
+                                  final jsonEncode = data.toJson();
+                                  Get.toNamed(RouteName.detailScreen,
+                                      arguments: {
+                                        'data': jsonEncode,
+                                      });
+                                },
+                                child: FavoriteCard(
+                                  imageUrl: data.productImage,
+                                  label: data.productName,
+                                  price: data.price,
+                                  rating: data.rating.toString(),
+                                ),
+                              );
                             },
-                            child: FavoriteCard(
-                              imageUrl: data.imageUrl,
-                              label: data.label,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Recommended',
+                          style: ConstantTextStyle.stylePoppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount:
+                              _homeController.recommendedProductList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final data =
+                                _homeController.recommendedProductList[index];
+                            return RecommendedCard(
+                              label: data.productName,
+                              rating: data.rating.toString(),
                               price: data.price,
-                              rating: data.rating,
-                            ),
-                          );
-                        },
-                      ),
+                              tag: '',
+                              imageUrl: data.productImage,
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 36),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Recommended',
-                      style: ConstantTextStyle.stylePoppins(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _homeController.recomendList.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final data = _homeController.recomendList[index];
-                        return RecommendedCard(
-                          label: data.label,
-                          rating: data.rating,
-                          price: data.price,
-                          tag: data.tag,
-                          imageUrl: data.imageUrl,
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
 import 'package:trajan_food_app/features/favourite/screen/favourite_screen.dart';
@@ -167,17 +165,4 @@ class MainController extends GetxController {
     FavouriteScreen(),
     PersonScreen(),
   ];
-
-  Future<void> getCurrentUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final user = prefs.getString('user');
-    print('USER FROM PREFS $user');
-    FirebaseAuth.instance.currentUser;
-  }
-
-  @override
-  void onInit() async {
-    await getCurrentUser();
-    super.onInit();
-  }
 }

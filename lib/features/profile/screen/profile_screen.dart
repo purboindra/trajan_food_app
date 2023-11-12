@@ -19,7 +19,7 @@ class PersonScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              const HeaderWidget(),
+              HeaderWidget(userModel: profileController.userModel),
               const SizedBox(
                 height: 20,
               ),

@@ -78,11 +78,9 @@ class AuthController extends GetxController {
         productFavorite: [],
       );
 
-      final user = await userCollection.add(userModel.toJson());
+      await userCollection.doc(emailController.text).set(userModel.toJson());
 
-      await userCollection.doc(user.id).update({'id': user.id});
-
-      final userCopywith = userModel.copyWith(id: user.id);
+      final userCopywith = userModel.copyWith(id: credential.user!.uid);
 
       final userEncode = jsonEncode(userCopywith.toJson());
 
@@ -121,12 +119,18 @@ class AuthController extends GetxController {
 
   Future<void> signInUser() async {
     _isLoading.value = true;
+    final prefs = await SharedPreferences.getInstance();
     try {
-      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
 
+      final userDocs = await userCollection.doc(emailController.text).get();
+
+      final userEncode = jsonEncode(userDocs.data());
+
+      prefs.setString('user', userEncode);
+
       Get.offAllNamed(RouteName.mainScreen);
-      print('USER $user');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.showSnackbar(const GetSnackBar(

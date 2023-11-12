@@ -41,7 +41,7 @@ class RecommendedCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: whiteColor, width: 2),
               image: DecorationImage(
-                image: AssetImage(imageUrl),
+                image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

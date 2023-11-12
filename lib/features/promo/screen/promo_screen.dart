@@ -161,19 +161,20 @@ class PromoScreen extends StatelessWidget {
                     height: 250,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: promoController.onlyForYouList.length,
+                      itemCount: promoController.onlyForYouProductList.length,
                       itemBuilder: (context, index) {
-                        final data = promoController.onlyForYouList[index];
+                        final data =
+                            promoController.onlyForYouProductList[index];
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           child: OnlyForYouCard(
-                            addres: data.address,
-                            discount: data.discount,
-                            imageUrl: data.imageUrl,
-                            isDiscount: data.isDiscount,
-                            menuTitle: data.menuTitle,
-                            rating: data.rating,
-                            restoName: data.restoName,
+                            addres: data.restoModel.addres,
+                            discount: '0',
+                            imageUrl: data.productImage,
+                            isDiscount: false,
+                            menuTitle: data.productName,
+                            rating: data.rating.toString(),
+                            restoName: data.restoModel.name,
                           ),
                         );
                       },
@@ -225,19 +226,20 @@ class PromoScreen extends StatelessWidget {
                     height: 250,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: promoController.blackFridayList.length,
+                      itemCount: promoController.blackFridayProductList.length,
                       itemBuilder: (context, index) {
-                        final data = promoController.blackFridayList[index];
+                        final data =
+                            promoController.blackFridayProductList[index];
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           child: OnlyForYouCard(
-                            addres: data.address,
-                            discount: data.discount,
-                            imageUrl: data.imageUrl,
-                            isDiscount: data.isDiscount,
-                            menuTitle: data.menuTitle,
-                            rating: data.rating,
-                            restoName: data.restoName,
+                            addres: data.restoModel.addres,
+                            discount: '0',
+                            imageUrl: data.productImage,
+                            isDiscount: false,
+                            menuTitle: data.productName,
+                            rating: data.rating.toString(),
+                            restoName: data.restoModel.name,
                           ),
                         );
                       },
