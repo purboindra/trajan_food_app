@@ -4,6 +4,7 @@ import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
 import 'package:trajan_food_app/features/promo/controller/promo_controller.dart';
 import 'package:trajan_food_app/features/promo/widgets/only_for_you_card.dart';
+import 'package:trajan_food_app/route/route_name.dart';
 
 class PromoScreen extends StatelessWidget {
   PromoScreen({super.key});
@@ -165,16 +166,23 @@ class PromoScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final data =
                             promoController.onlyForYouProductList[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: OnlyForYouCard(
-                            addres: data.restoModel.addres,
-                            discount: '0',
-                            imageUrl: data.productImage,
-                            isDiscount: false,
-                            menuTitle: data.productName,
-                            rating: data.rating.toString(),
-                            restoName: data.restoModel.name,
+                        return InkWell(
+                          onTap: () {
+                            Get.toNamed(RouteName.detailScreen, arguments: {
+                              'product_id': data.productId,
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: OnlyForYouCard(
+                              addres: data.restoModel.addres,
+                              discount: '0',
+                              imageUrl: data.productImage,
+                              isDiscount: false,
+                              menuTitle: data.productName,
+                              rating: data.rating.toString(),
+                              restoName: data.restoModel.name,
+                            ),
                           ),
                         );
                       },
@@ -230,16 +238,23 @@ class PromoScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final data =
                             promoController.blackFridayProductList[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: OnlyForYouCard(
-                            addres: data.restoModel.addres,
-                            discount: '0',
-                            imageUrl: data.productImage,
-                            isDiscount: false,
-                            menuTitle: data.productName,
-                            rating: data.rating.toString(),
-                            restoName: data.restoModel.name,
+                        return InkWell(
+                          onTap: () {
+                            Get.toNamed(RouteName.detailScreen, arguments: {
+                              'product_id': data.productId,
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: OnlyForYouCard(
+                              addres: data.restoModel.addres,
+                              discount: '0',
+                              imageUrl: data.productImage,
+                              isDiscount: false,
+                              menuTitle: data.productName,
+                              rating: data.rating.toString(),
+                              restoName: data.restoModel.name,
+                            ),
                           ),
                         );
                       },

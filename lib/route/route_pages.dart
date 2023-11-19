@@ -39,18 +39,7 @@ class RoutePages {
       name: RouteName.detailScreen,
       binding: DetailBinding(),
       page: () {
-        ProductModel productData = ProductModel(
-            imageUrl: '', label: '', price: '', rating: '', tag: '');
-        if (Get.arguments != null && Get.arguments is Map) {
-          final Map<String, dynamic> args = Get.arguments;
-
-          if (args.containsKey('data')) {
-            productData = ProductModel.fromJson(args['data']);
-          }
-        }
-        return DetailScreen(
-          productModel: productData,
-        );
+        return DetailScreen();
       },
     ),
     GetPage(

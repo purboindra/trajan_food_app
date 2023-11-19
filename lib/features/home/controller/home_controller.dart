@@ -184,6 +184,7 @@ class HomeController extends GetxController {
       final user = prefs.getString('user');
       final userDecode = jsonDecode(user!);
       _userModel.value = UserModel.fromJson(userDecode);
+      print('CURRENT USER ${_userModel.toJson()}');
       return _userModel.value;
     } catch (e) {
       print("ERROR GET CURRENT USER $e");

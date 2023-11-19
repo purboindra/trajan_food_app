@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
+import 'package:trajan_food_app/features/models/product_model.dart';
 
 class RestoInformationWidget extends StatelessWidget {
   const RestoInformationWidget({
     super.key,
+    required this.productModel,
   });
+
+  final ProductModel productModel;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class RestoInformationWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'My Steak',
+                      productModel.restoModel.name,
                       style: ConstantTextStyle.stylePoppins(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
@@ -50,7 +54,7 @@ class RestoInformationWidget extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'Jl. Adam D’Angelo, No. 22, Citra-Raya,Tangerang.',
+                      productModel.restoModel.addres,
                       style: ConstantTextStyle.stylePoppins(color: greyColor),
                     ),
                   ],

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
-import 'package:trajan_food_app/features/models/recommend_model.dart';
+import 'package:trajan_food_app/features/detail/controller/detail_controller.dart';
+import 'package:trajan_food_app/features/models/product_model.dart';
 
 class HeaderDetailWidget extends StatelessWidget {
-  const HeaderDetailWidget({
-    super.key,
-    required this.productModel,
-  });
+  const HeaderDetailWidget(
+      {super.key, required this.productModel, required this.detailController});
 
   final ProductModel productModel;
+  final DetailController detailController;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,8 @@ class HeaderDetailWidget extends StatelessWidget {
               bottomRight: Radius.circular(18),
             ),
             image: DecorationImage(
-                image: AssetImage(productModel.imageUrl), fit: BoxFit.cover),
+                image: NetworkImage(productModel.productImage),
+                fit: BoxFit.cover),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 36),
@@ -36,7 +37,7 @@ class HeaderDetailWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    productModel.label,
+                    productModel.productName,
                     style: ConstantTextStyle.stylePoppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -49,7 +50,7 @@ class HeaderDetailWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        productModel.tag,
+                        '',
                         style: ConstantTextStyle.stylePoppins(
                             color: const Color(0xffDCDBDB)),
                       ),
@@ -64,7 +65,7 @@ class HeaderDetailWidget extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            productModel.rating,
+                            productModel.rating.toString(),
                             style: ConstantTextStyle.stylePoppins(
                               fontWeight: FontWeight.w600,
                               color: whiteColor,
@@ -82,13 +83,33 @@ class HeaderDetailWidget extends StatelessWidget {
         Positioned(
           top: 45,
           left: 25,
-          child: InkWell(
-            onTap: () => Get.back(),
-            child: const Icon(
-              Icons.arrow_back,
-              color: whiteColor,
-              size: 36,
-            ),
+          right: 25,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () => Get.back(),
+                child: const Icon(
+                  Icons.arrow_back,
+                  color: whiteColor,
+                  size: 36,
+                ),
+              ),
+              Obx(() => detailController.isLoadingFavorite.isTrue
+                  ? const SizedBox()
+                  : InkWell(
+                      onTap: () => detailController
+                          .handleFavorite(productModel.productId),
+                      child: Icon(
+                        detailController.userModel!.productFavorite
+                                .contains(productModel.productId)
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        color: Colors.red,
+                        size: 36,
+                      ),
+                    )),
+            ],
           ),
         ),
       ],

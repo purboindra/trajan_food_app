@@ -85,10 +85,9 @@ class HomeScreen extends StatelessWidget {
                                   _homeController.favoriteProductList[index];
                               return InkWell(
                                 onTap: () {
-                                  final jsonEncode = data.toJson();
                                   Get.toNamed(RouteName.detailScreen,
                                       arguments: {
-                                        'data': jsonEncode,
+                                        'product_id': data.productId,
                                       });
                                 },
                                 child: FavoriteCard(
@@ -130,12 +129,19 @@ class HomeScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final data =
                                 _homeController.recommendedProductList[index];
-                            return RecommendedCard(
-                              label: data.productName,
-                              rating: data.rating.toString(),
-                              price: data.price,
-                              tag: '',
-                              imageUrl: data.productImage,
+                            return InkWell(
+                              onTap: () {
+                                Get.toNamed(RouteName.detailScreen, arguments: {
+                                  'product_id': data.productId,
+                                });
+                              },
+                              child: RecommendedCard(
+                                label: data.productName,
+                                rating: data.rating.toString(),
+                                price: data.price,
+                                tag: '',
+                                imageUrl: data.productImage,
+                              ),
                             );
                           },
                         ),
