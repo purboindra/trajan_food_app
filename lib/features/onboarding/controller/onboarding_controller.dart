@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/route/route_name.dart';
 import 'package:trajan_food_app/services/location_service.dart';
 
@@ -15,14 +16,13 @@ class OnboardingController extends GetxController {
   RxInt indexImage = 0.obs;
 
   void handleGetStared() async {
-    print('HANDLE GET STARTED CALLED');
+    final prefs = await SharedPreferences.getInstance();
     _isLoading.value = true;
     final location = await LocationService.getCurrentPosition();
     _isLoading.value = false;
     if (location != null) {
       Get.offAllNamed(RouteName.signUpScreen);
-    } else {
-      return;
     }
+    prefs.setBool("hasOnboard", true);
   }
 }
