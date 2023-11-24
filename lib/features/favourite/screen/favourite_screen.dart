@@ -16,10 +16,8 @@ class FavouriteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: bgColor,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 36,
-          ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 18),
           child: Column(
             children: [
               Row(
@@ -60,51 +58,36 @@ class FavouriteScreen extends StatelessWidget {
               ),
               Obx(() {
                 if (_favoriteController.isGrid.isTrue) {
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: _favoriteController.favoriteList.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisExtent: 300,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 16),
-                    itemBuilder: (context, index) {
-                      final data = _favoriteController.favoriteList[index];
-                      return GridCard(
-                        addres: data.address,
-                        imageUrl: data.imageUrl,
-                        favoriteController: _favoriteController,
-                        index: index,
-                        isFavorite: data.isFavorite,
-                        menuTitle: data.menuTitle,
-                        price: data.price,
-                        rating: data.rating,
-                        restoName: data.restoName,
-                      );
-                    },
+                  return Expanded(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: _favoriteController.favoriteProduct.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              mainAxisExtent: 300,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16),
+                      itemBuilder: (context, index) {
+                        return GridCard(
+                          favoriteController: _favoriteController,
+                          index: index,
+                        );
+                      },
+                    ),
                   );
                 }
-                return ListView.builder(
-                  itemCount: _favoriteController.favoriteList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final data = _favoriteController.favoriteList[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: ListCard(
-                        addres: data.address,
-                        imageUrl: data.imageUrl,
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: _favoriteController.favoriteProduct.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return ListCard(
                         favoriteController: _favoriteController,
                         index: index,
-                        isFavorite: data.isFavorite,
-                        menuTitle: data.menuTitle,
-                        price: data.price,
-                        rating: data.rating,
-                        restoName: data.restoName,
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               }),
             ],

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/constant/constants_firebase_collections.dart';
+import 'package:trajan_food_app/features/favourite/controller/favorite_controller.dart';
 import 'package:trajan_food_app/features/models/product_model.dart';
 import 'package:trajan_food_app/features/models/resto_model.dart';
 import 'package:trajan_food_app/features/models/user_model.dart';
@@ -12,6 +13,8 @@ import 'package:trajan_food_app/features/models/user_model.dart';
 class DetailController extends GetxController {
   final RxInt _itemCount = 1.obs;
   RxInt get itemCount => _itemCount;
+
+  final FavoriteController _favoriteController = Get.find();
 
   String _productId = '0';
 
@@ -69,6 +72,8 @@ class DetailController extends GetxController {
       List<String> favList = List.from(user["productFavorite"]);
       favList.add(productId);
       await userCollection.doc(userEmail).update({"productFavorite": favList});
+      await _favoriteController.getFavoriteProduct();
+      await _favoriteController.getCurrentUser();
     } catch (e) {
       print('ERROR FROM ADD TO FAV $e');
     }

@@ -4,25 +4,12 @@ import 'package:trajan_food_app/constant/constant_text_style.dart';
 import 'package:trajan_food_app/features/favourite/controller/favorite_controller.dart';
 
 class GridCard extends StatelessWidget {
-  const GridCard(
-      {super.key,
-      required this.imageUrl,
-      required this.restoName,
-      required this.menuTitle,
-      required this.isFavorite,
-      required this.price,
-      required this.addres,
-      required this.index,
-      required this.favoriteController,
-      required this.rating});
+  const GridCard({
+    super.key,
+    required this.index,
+    required this.favoriteController,
+  });
 
-  final String imageUrl;
-  final String restoName;
-  final String menuTitle;
-  final bool isFavorite;
-  final String price;
-  final String rating;
-  final String addres;
   final int index;
   final FavoriteController favoriteController;
 
@@ -44,8 +31,8 @@ class GridCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(18),
-                  child: Image.asset(
-                    imageUrl,
+                  child: Image.network(
+                    favoriteController.favoriteProduct[index].productImage,
                     width: 150,
                     height: 100,
                     fit: BoxFit.cover,
@@ -75,7 +62,8 @@ class GridCard extends StatelessWidget {
                           width: 3,
                         ),
                         Text(
-                          rating,
+                          favoriteController.favoriteProduct[index].rating
+                              .toString(),
                           style: ConstantTextStyle.stylePoppins(
                             fontWeight: FontWeight.w700,
                           ),
@@ -91,7 +79,7 @@ class GridCard extends StatelessWidget {
             height: 5,
           ),
           Text(
-            restoName,
+            favoriteController.favoriteProduct[index].restoModel.name,
             style: ConstantTextStyle.stylePoppins(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -102,7 +90,7 @@ class GridCard extends StatelessWidget {
             height: 3,
           ),
           Text(
-            menuTitle,
+            favoriteController.favoriteProduct[index].productName,
             style: ConstantTextStyle.stylePoppins(
               fontWeight: FontWeight.w500,
             ),
@@ -111,7 +99,7 @@ class GridCard extends StatelessWidget {
             height: 3,
           ),
           Text(
-            addres,
+            favoriteController.favoriteProduct[index].restoModel.addres,
             style: ConstantTextStyle.stylePoppins(
               color: greyColor,
             ),
@@ -120,7 +108,7 @@ class GridCard extends StatelessWidget {
             height: 3,
           ),
           Text(
-            'Rp$price',
+            'Rp${favoriteController.favoriteProduct[index].price}',
             style: ConstantTextStyle.stylePoppins(
               fontWeight: FontWeight.w300,
             ),
@@ -129,9 +117,13 @@ class GridCard extends StatelessWidget {
           Align(
             alignment: Alignment.topRight,
             child: IconButton(
-              onPressed: () => favoriteController.addToFavorite(index),
+              onPressed: () => favoriteController.removeFromFav(
+                  favoriteController.favoriteProduct[index].productId),
               icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_outline,
+                favoriteController.userModel!.productFavorite.contains(
+                        favoriteController.favoriteProduct[index].productId)
+                    ? Icons.favorite
+                    : Icons.favorite_outline,
                 size: 24,
                 color: const Color(0xffFF0000),
               ),

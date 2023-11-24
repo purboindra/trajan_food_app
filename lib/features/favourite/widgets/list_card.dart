@@ -5,30 +5,15 @@ import 'package:trajan_food_app/features/favourite/controller/favorite_controlle
 
 class ListCard extends StatelessWidget {
   const ListCard(
-      {super.key,
-      required this.imageUrl,
-      required this.restoName,
-      required this.menuTitle,
-      required this.isFavorite,
-      required this.price,
-      required this.rating,
-      required this.addres,
-      required this.index,
-      required this.favoriteController});
+      {super.key, required this.index, required this.favoriteController});
 
-  final String imageUrl;
-  final String restoName;
-  final String menuTitle;
-  final bool isFavorite;
-  final String price;
-  final String rating;
-  final String addres;
   final int index;
   final FavoriteController favoriteController;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
       height: 190,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
@@ -44,8 +29,8 @@ class ListCard extends StatelessWidget {
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(18),
-                    child: Image.asset(
-                      imageUrl,
+                    child: Image.network(
+                      favoriteController.favoriteProduct[index].productImage,
                       width: 130,
                       height: 130,
                       fit: BoxFit.cover,
@@ -74,7 +59,8 @@ class ListCard extends StatelessWidget {
                           width: 3,
                         ),
                         Text(
-                          rating,
+                          favoriteController.favoriteProduct[index].rating
+                              .toString(),
                           style: ConstantTextStyle.stylePoppins(
                             fontWeight: FontWeight.w700,
                           ),
@@ -94,7 +80,7 @@ class ListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  restoName,
+                  favoriteController.favoriteProduct[index].restoModel.name,
                   style: ConstantTextStyle.stylePoppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -105,7 +91,7 @@ class ListCard extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  menuTitle,
+                  favoriteController.favoriteProduct[index].productName,
                   style: ConstantTextStyle.stylePoppins(
                     fontWeight: FontWeight.w500,
                   ),
@@ -114,7 +100,7 @@ class ListCard extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  addres,
+                  favoriteController.favoriteProduct[index].restoModel.addres,
                   style: ConstantTextStyle.stylePoppins(
                     color: greyColor,
                   ),
@@ -123,7 +109,7 @@ class ListCard extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  'Rp$price',
+                  'Rp${favoriteController.favoriteProduct[index].price}',
                   style: ConstantTextStyle.stylePoppins(
                     fontWeight: FontWeight.w300,
                   ),
@@ -137,9 +123,13 @@ class ListCard extends StatelessWidget {
           Align(
             alignment: Alignment.bottomRight,
             child: IconButton(
-              onPressed: () => favoriteController.addToFavorite(index),
+              onPressed: () => favoriteController.removeFromFav(
+                  favoriteController.favoriteProduct[index].productId),
               icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_outline,
+                favoriteController.userModel!.productFavorite.contains(
+                        favoriteController.favoriteProduct[index].productId)
+                    ? Icons.favorite
+                    : Icons.favorite_outline,
                 size: 24,
                 color: const Color(0xffFF0000),
               ),
