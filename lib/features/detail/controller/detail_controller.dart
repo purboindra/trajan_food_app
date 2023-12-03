@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/constant/constants_firebase_collections.dart';
 import 'package:trajan_food_app/features/favourite/controller/favorite_controller.dart';
+import 'package:trajan_food_app/features/models/order_model.dart';
 import 'package:trajan_food_app/features/models/product_model.dart';
 import 'package:trajan_food_app/features/models/resto_model.dart';
 import 'package:trajan_food_app/features/models/user_model.dart';
+import 'package:trajan_food_app/services/notif_service.dart';
 
 class DetailController extends GetxController {
   final RxInt _itemCount = 1.obs;
@@ -23,6 +25,26 @@ class DetailController extends GetxController {
 
   CollectionReference userCollection =
       FirebaseCollectionConstants.getUserCollection();
+
+  CollectionReference orderCollection =
+      FirebaseCollectionConstants.getOrdersCollection();
+
+  final Rx<OrderModel> _orderModel = OrderModel(
+          uid: '',
+          email: '',
+          productName: '',
+          productId: 0,
+          status: "",
+          productImage: '',
+          createdAt: 0,
+          expiredAt: 0,
+          restoModel: RestoModel(name: '', addres: '', rating: 0),
+          price: 0,
+          rating: 0,
+          totalPrice: 0,
+          quantity: 0)
+      .obs;
+  Rx<OrderModel> get orderModel => _orderModel;
 
   final Rx<ProductModel> _productModel = ProductModel(
           price: '0',
@@ -66,14 +88,18 @@ class DetailController extends GetxController {
     }
   }
 
+  Future<void> _updateDataFavorite() async {
+    await _favoriteController.getFavoriteProduct();
+    await _favoriteController.getCurrentUser();
+  }
+
   Future<void> addToFav(
       String productId, Map<String, dynamic> user, String userEmail) async {
     try {
       List<String> favList = List.from(user["productFavorite"]);
       favList.add(productId);
       await userCollection.doc(userEmail).update({"productFavorite": favList});
-      await _favoriteController.getFavoriteProduct();
-      await _favoriteController.getCurrentUser();
+      await _updateDataFavorite();
     } catch (e) {
       print('ERROR FROM ADD TO FAV $e');
     }
@@ -88,22 +114,6 @@ class DetailController extends GetxController {
     } catch (e) {
       print('ERROR FROM REMOVE FROM FAV $e');
     }
-  }
-
-  void handleFavorite(String productId) async {
-    _isLoadingFavorite.value = true;
-    final prefs = await SharedPreferences.getInstance();
-    final userPrefs = jsonDecode(prefs.getString("user")!);
-    final user = await userCollection.doc(userPrefs["email"]).get();
-    final userData = user.data() as Map<String, dynamic>;
-    List<String> favList = List.from(userData["productFavorite"]);
-    if (favList.contains(productId)) {
-      await removeFromFav(productId, userData, userPrefs["email"]);
-    } else {
-      await addToFav(productId, userData, userPrefs["email"]);
-    }
-    await getCurrentUser();
-    _isLoadingFavorite.value = false;
   }
 
   Future<UserModel> getCurrentUser() async {
@@ -139,9 +149,76 @@ class DetailController extends GetxController {
     }
   }
 
+  void handleFavorite(String productId) async {
+    _isLoadingFavorite.value = true;
+    final prefs = await SharedPreferences.getInstance();
+    final userPrefs = jsonDecode(prefs.getString("user")!);
+    final user = await userCollection.doc(userPrefs["email"]).get();
+    final userData = user.data() as Map<String, dynamic>;
+    List<String> favList = List.from(userData["productFavorite"]);
+    if (favList.contains(productId)) {
+      await removeFromFav(productId, userData, userPrefs["email"]);
+    } else {
+      await addToFav(productId, userData, userPrefs["email"]);
+    }
+    await getCurrentUser();
+    await _updateDataFavorite();
+    _isLoadingFavorite.value = false;
+  }
+
+  Future<void> checkStatusOrder() async {
+    try {
+      final user = await getCurrentUser();
+      final allDataOrder = await orderCollection
+          .where("email", isEqualTo: user.email)
+          .where("status", isEqualTo: "pending")
+          .get();
+      for (final dataOrder in allDataOrder.docs) {
+        final data = dataOrder.data() as Map<String, dynamic>;
+        final dateNow = DateTime.now();
+        final expiredAt =
+            DateTime.fromMillisecondsSinceEpoch(data["expiredAt"]);
+        if (dateNow.isAfter(expiredAt)) {
+          dataOrder.reference.update({"status": "fail"});
+        }
+      }
+    } catch (e) {
+      print("ERROR FROM CHECK STATUS ORDER $e");
+    }
+  }
+
+  Future<void> createOrder() async {
+    try {
+      final user = await getCurrentUser();
+      _orderModel.value = OrderModel(
+        uid: user.uid,
+        email: user.email,
+        productName: _productModel.value.productName,
+        productId: int.parse(_productModel.value.productId),
+        productImage: _productModel.value.productImage,
+        createdAt: DateTime.now().millisecondsSinceEpoch,
+        expiredAt: DateTime.now().millisecondsSinceEpoch + (15 * 60 * 1000),
+        restoModel: _productModel.value.restoModel,
+        price: int.parse(_productModel.value.price),
+        rating: _productModel.value.rating.toInt(),
+        totalPrice: totalPrice(_productModel.value).value,
+        quantity: _itemCount.value,
+        status: "pending",
+      );
+      orderCollection.add(_orderModel.value.toMap());
+      NotificationService.showNotif(
+          'Your order has been created!',
+          'Your item is ${_productModel.value.productName}',
+          'Product Name: ${_productModel.value.productName} Product Id: ${_productModel.value.productId}');
+    } catch (e, st) {
+      print('ERROR FROM CREATE ORDER $e $st');
+    }
+  }
+
   @override
-  void onInit() {
+  void onInit() async {
     _isLoading.value = true;
+    await checkStatusOrder();
     runGetDetailProduct();
     super.onInit();
   }

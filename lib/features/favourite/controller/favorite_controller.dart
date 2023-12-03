@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -44,7 +45,7 @@ class FavoriteController extends GetxController {
             .add(ProductModel.fromJson(product.data() as Map<String, dynamic>));
       }
     } catch (e) {
-      print('ERROR FROM GET FAVORITE PRODUCT $e');
+      log('ERROR FROM GET FAVORITE PRODUCT $e');
     } finally {
       _isLoading.value = false;
     }
@@ -67,7 +68,7 @@ class FavoriteController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       final userPrefs = jsonDecode(prefs.getString("user")!);
       final user = await userCollection.doc(userPrefs["email"]).get();
-      List<String> favList = List.from(user["productFavorite"]);
+      List<String> favList = List<String>.from(user["productFavorite"]);
       favList.remove(productId);
       await userCollection
           .doc(user["email"])
@@ -75,7 +76,7 @@ class FavoriteController extends GetxController {
       await getCurrentUser();
       await getFavoriteProduct();
     } catch (e) {
-      print('ERROR FROM REMOVE FROM FAV $e');
+      log('ERROR FROM REMOVE FROM FAV $e');
     }
   }
 

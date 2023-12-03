@@ -8,4 +8,8 @@ class FirebaseCollectionConstants {
   static CollectionReference getProductCollection() {
     return FirebaseFirestore.instance.collection("products");
   }
+
+  static CollectionReference getOrdersCollection() {
+    return FirebaseFirestore.instance.collection("orders");
+  }
 }

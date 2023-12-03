@@ -254,8 +254,8 @@ class OrderScreen extends StatelessWidget {
                         height: 70,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18),
-                            image: DecorationImage(
-                              image: AssetImage(productModel.imageUrl),
+                            image: const DecorationImage(
+                              image: AssetImage(''),
                               fit: BoxFit.cover,
                             )),
                       ),
@@ -267,7 +267,7 @@ class OrderScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              productModel.label,
+                              'testt',
                               style: ConstantTextStyle.stylePoppins(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -277,7 +277,7 @@ class OrderScreen extends StatelessWidget {
                               height: 5,
                             ),
                             Text(
-                              'Rp$totalPrice',
+                              'Rp32',
                               style: ConstantTextStyle.stylePoppins(),
                             ),
                             const SizedBox(

@@ -73,6 +73,7 @@ class HomeController extends GetxController {
       final data = await productCollection
           .where("product_type", isEqualTo: "recommended")
           .get();
+
       for (final product in data.docs) {
         _recommendedProductList
             .add(ProductModel.fromJson(product.data() as Map<String, dynamic>));

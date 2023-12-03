@@ -4,10 +4,12 @@ import 'package:get/route_manager.dart';
 import 'package:trajan_food_app/firebase_options.dart';
 import 'package:trajan_food_app/route/route_name.dart';
 import 'package:trajan_food_app/route/route_pages.dart';
+import 'package:trajan_food_app/services/notif_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await NotificationService.initializeNotif();
   runApp(const MyApp());
 }
 

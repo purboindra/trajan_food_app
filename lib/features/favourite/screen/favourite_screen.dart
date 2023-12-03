@@ -26,7 +26,7 @@ class FavouriteScreen extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                        'Buy Again',
+                        'My Favorite',
                         style: ConstantTextStyle.stylePoppins(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,

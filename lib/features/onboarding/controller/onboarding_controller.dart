@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trajan_food_app/route/route_name.dart';
@@ -14,6 +15,10 @@ class OnboardingController extends GetxController {
   ];
 
   RxInt indexImage = 0.obs;
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
+      const AndroidNotificationDetails(
+          '1', 'trajan_notif' //Required for Android 8.0 or after
+          );
 
   void handleGetStared() async {
     final prefs = await SharedPreferences.getInstance();
