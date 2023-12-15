@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:trajan_food_app/constant/constant_color.dart';
 import 'package:trajan_food_app/constant/constant_text_style.dart';
+import 'package:trajan_food_app/route/route_name.dart';
 
 class SearchWidget extends StatelessWidget {
   const SearchWidget({super.key});
@@ -10,6 +12,7 @@ class SearchWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 36),
       child: TextFormField(
+        onTap: () => Get.toNamed(RouteName.searchScreen),
         decoration: InputDecoration(
           hintText: 'Search',
           hintStyle: ConstantTextStyle.stylePoppins(

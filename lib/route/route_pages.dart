@@ -6,6 +6,8 @@ import 'package:trajan_food_app/features/main/screen/main_screen.dart';
 import 'package:trajan_food_app/features/models/recommend_model.dart';
 import 'package:trajan_food_app/features/onboarding/screen/onboarding_screen.dart';
 import 'package:trajan_food_app/features/order/screen/order_screen.dart';
+import 'package:trajan_food_app/features/search/bindings/search_binding.dart';
+import 'package:trajan_food_app/features/search/screen/search_screen.dart';
 import 'package:trajan_food_app/features/signin/screen/sign_in_screen.dart';
 import 'package:trajan_food_app/features/signup/screen/sign_up_screen.dart';
 import 'package:trajan_food_app/features/splash/bindings/splash_binding.dart';
@@ -70,6 +72,11 @@ class RoutePages {
           totalPrice: totalPrice,
         );
       },
+    ),
+    GetPage(
+      name: RouteName.searchScreen,
+      page: () => SearchScreen(),
+      binding: SearchBinding(),
     ),
   ];
 }
